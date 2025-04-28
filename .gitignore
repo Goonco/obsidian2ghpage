@@ -41,4 +41,5 @@ yarn-error.log*
 next-env.d.ts
 
 # obsidian vault
+/obsidian
 /blog
