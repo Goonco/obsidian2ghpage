@@ -11,6 +11,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "allowImportingTsExtensions": true, // 뭔지 모르겠는데 tsnode 는 ESM환경이고 Next는 CommonJS 환경이라 scriptd에서 import 할때 무조건 ts를 붙여야되고 어쩌구...
     "jsx": "preserve",
     "incremental": true,
     "plugins": [

@@ -8,8 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "dump": "rm -rf blog/\nts-node dump-mdx.ts",
-    "dump:debug": "node --inspect-brk -r ts-node/register dump-mdx.ts"
+    "dump": "rm -rf blog/\nts-node scripts/dump-mdx.ts"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",
