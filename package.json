@@ -15,7 +15,6 @@
     "@mdx-js/react": "^3.1.0",
     "@next/mdx": "^15.3.1",
     "@types/mdx": "^2.0.13",
-    "glob": "^11.0.2",
     "ignore": "^7.0.4",
     "next": "15.3.1",
     "react": "^19.0.0",
@@ -29,6 +28,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
+    "glob": "^11.0.2",
+    "remark-gfm": "^4.0.1",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "typescript": "^5"
