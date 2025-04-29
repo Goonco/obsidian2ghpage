@@ -1,20 +1,35 @@
 import fs from "fs";
+import path from "path";
+import { FileSystemNode } from "@/scripts/file-tree";
+import { DEST_DIR } from "@/scripts/dump-mdx";
 
+// [ { slug: [ 'Obsidian 2 Github Pages' ] } ]
 export function getAllMDFilePaths() {
-  const files = fs.readdirSync(`./blog`, {
-    recursive: true,
-    encoding: "utf-8",
-  });
-  const mdFiles = files
-    .filter((fn) => fn.endsWith(".mdx"))
-    .map((fn) => {
-      fn = fn.replace(/\.mdx$/, "");
-      return fn.split("/");
-    });
-
-  return mdFiles.map((fnArr) => {
+  const fileTree = fetchFileTree();
+  return walk(fileTree, []).map((fnArr) => {
     return {
       slug: fnArr,
     };
   });
+}
+
+function walk(fsNode: FileSystemNode, pathAcc: string[]): string[][] {
+  const slug = fsNode.name === "" ? [] : pathAcc.concat(fsNode.name);
+
+  if (fsNode.type === "file") return [slug];
+  if (fsNode.type === "directory" && fsNode.children) {
+    return fsNode.children.reduce((acc: string[][], node) => {
+      const childSlug = walk(node, slug);
+      if (childSlug.length > 0) acc.push(...childSlug);
+      return acc;
+    }, []);
+  }
+
+  return [];
+}
+
+export function fetchFileTree() {
+  return JSON.parse(
+    fs.readFileSync(path.join(DEST_DIR, "file-tree.json"), "utf-8")
+  ) as FileSystemNode;
 }

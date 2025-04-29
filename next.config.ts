@@ -9,6 +9,7 @@ const nextConfig = {
 
 const withMDX = createMDX({
   // Add markdown plugins here, as desired
+  extension: /\.(md|mdx)$/,
 });
 
 // Merge MDX config with Next.js config

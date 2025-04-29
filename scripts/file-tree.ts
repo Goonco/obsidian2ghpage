@@ -7,13 +7,13 @@ export const IGNORE_FILE = path.resolve(SRC_DIR, ".mdxignore");
 
 const ign = ignore().add(fs.readFileSync(IGNORE_FILE, "utf-8").toString());
 
-type FileNode = {
+export type FileNode = {
   type: "file";
   path: string;
   name: string;
 };
 
-type DirectoryNode = {
+export type DirectoryNode = {
   type: "directory";
   name: string;
   children: FileSystemNode[] | null;
@@ -28,7 +28,6 @@ export default function generateFileTree(
   const currentDirectory: FileSystemNode = {
     type: "directory",
     name: dirName,
-
     children: [],
   };
 

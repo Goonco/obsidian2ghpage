@@ -3,7 +3,7 @@ import path from "path";
 import generateFileTree, { SRC_DIR } from "./file-tree.ts";
 import type { FileSystemNode } from "./file-tree.ts";
 
-const DEST_DIR = path.resolve("./blog");
+export const DEST_DIR = path.resolve("./blog");
 
 function ensureDir(dir: string) {
   if (!fs.existsSync(dir)) {
@@ -15,7 +15,7 @@ function walk(fsNode: FileSystemNode, pathAcc: string) {
   if (fsNode.type === "file") {
     const { name, path: filePath } = fsNode;
     const newContent = modifyContent(fs.readFileSync(filePath, "utf-8"));
-    fs.writeFileSync(path.join(pathAcc, `${name}.mdx`), newContent);
+    fs.writeFileSync(path.join(pathAcc, `${name}.md`), newContent);
   }
 
   if (fsNode.type === "directory") {

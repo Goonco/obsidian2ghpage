@@ -6,13 +6,14 @@ export default async function Page({
   params: Promise<{ slug: string[] }>;
 }) {
   const { slug } = await params;
-  const { default: Post } = await import(`@/blog/${slug.join("/")}.mdx`);
+  const { default: Post } = await import(
+    `@/blog/${decodeURI(slug.join("/"))}.md`
+  );
 
   return <Post />;
 }
 
 export function generateStaticParams() {
-  // console.log(getAllMDFilePaths());
   return getAllMDFilePaths();
 }
 
