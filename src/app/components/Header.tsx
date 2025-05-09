@@ -13,13 +13,15 @@ export function Header() {
         <div className="text-2xl font-semibold">Obsidian2GHPage</div>
       </h1>
       <nav className="flex flex-row gap-6 items-center">
-        <NavButton>Blog</NavButton>
-        <NavButton>Projects</NavButton>
-        <NavButton>About</NavButton>
         <NavButton>
+          <a href="/blog">Blog</a>
+        </NavButton>
+        <NavButton tooltip>Projects</NavButton>
+        <NavButton tooltip>About</NavButton>
+        <NavButton tooltip>
           <LucideSearch />
         </NavButton>
-        <NavButton>
+        <NavButton tooltip>
           <LucideSun />
         </NavButton>
       </nav>
@@ -27,9 +29,19 @@ export function Header() {
   );
 }
 
-function NavButton({ children }: { children: React.ReactNode }) {
+function NavButton({
+  tooltip = false,
+  children,
+}: {
+  tooltip?: boolean;
+  children: React.ReactNode;
+}) {
   return (
-    <button className="font-medium hover:text-[#6C31E3] cursor-pointer">
+    <button
+      className={`${
+        tooltip && "tooltip"
+      } font-medium hover:text-[#6C31E3] cursor-pointer`}
+    >
       {children}
     </button>
   );
