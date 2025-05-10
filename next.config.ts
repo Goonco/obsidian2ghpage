@@ -4,7 +4,7 @@ import remarkGfm from "remark-gfm";
 
 /** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {
-  output: "export", // SSG(Static site generation) : https://nextjs.org/docs/app/guides/static-exports
+  // output: "export", // SSG(Static site generation) : https://nextjs.org/docs/app/guides/static-exports
 
   // Configure `pageExtensions` to include markdown and MDX files
   pageExtensions: ["md", "mdx", "ts", "tsx"],
