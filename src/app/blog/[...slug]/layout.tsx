@@ -1,8 +1,15 @@
-export default function PostLayout({
+import { Heading, parseHeader } from "@/src/util/parse";
+
+export default async function PostLayout({
+  params,
   children,
 }: {
+  params: Promise<{ slug: string[] }>;
   children: React.ReactNode;
 }) {
+  const { slug } = await params;
+  const headerList = parseHeader(`${decodeURI(slug.join("/"))}.md`);
+
   return (
     <div className="my-4 space-y-10 ">
       <ArticleHeader />
@@ -10,7 +17,7 @@ export default function PostLayout({
         <hr className="text-gray-200" />
         <article className="prose">{children}</article>
         <aside className="absolute top-0 h-full left-full">
-          <OverviewBox />
+          <OverviewBox headerList={headerList} />
         </aside>
       </OverviewBoxBaseline>
     </div>
@@ -37,18 +44,14 @@ function ArticleHeader() {
   );
 }
 
-function OverviewBox() {
+function OverviewBox({ headerList }: { headerList: Heading[] }) {
   return (
     <div className="sticky space-y-1 ml-12 pl-4 pt-1 top-40 border-l border-gray-200">
       <p className="text-sm font-bold">Overveiw</p>
       <div className="whitespace-nowrap text-xs">
-        <p className="text-violet-700">Heading 1</p>
-        <p className="ml-3">Heading 1</p>
-        <p className="ml-6">Heading 2</p>
-        <p className="ml-9">Heading 3</p>
-        <p className="ml-12">Heading 4</p>
-        <p className="ml-15">Heading 5</p>
-        <p className="ml-18">Heading 6</p>
+        {headerList.map((header) => (
+          <p className={`ml-${3 * header.depth}`}>{header.value}</p>
+        ))}
       </div>
     </div>
   );

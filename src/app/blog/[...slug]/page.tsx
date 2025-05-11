@@ -1,4 +1,4 @@
-import { getAllMDFilePaths } from "@/src/util/parse";
+import { parseFileTree } from "@/src/util/parse";
 
 export default async function Page({
   params,
@@ -14,7 +14,7 @@ export default async function Page({
 }
 
 export function generateStaticParams() {
-  return getAllMDFilePaths();
+  return parseFileTree();
 }
 
 // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamicparams
