@@ -6,6 +6,7 @@ import { DEST_DIR } from "@/scripts/dump-mdx";
 import remarkParse from "remark-parse";
 import { unified } from "unified";
 import { toString as mdnodeToString } from "mdast-util-to-string";
+import GithubSlugger from "github-slugger";
 
 export function parseFileTree() {
   const fileTree = fetchFileTree();
@@ -40,15 +41,25 @@ export function fetchFileTree() {
 export type Heading = {
   depth: number;
   value: string;
+  id: string;
 };
 
 export function parseHeader(fileName: string): Heading[] {
   const content = fs.readFileSync(path.join(DEST_DIR, fileName), "utf-8");
+  const slugger = new GithubSlugger();
+
   return unified()
     .use(remarkParse)
     .parse(content)
-    .children.filter((el) => el.type === "heading")
-    .map((el) => {
-      return { depth: el.depth, value: mdnodeToString(el) };
+    .children.flatMap((node) => {
+      if (node.type !== "heading") return [];
+      const text = mdnodeToString(node);
+      return [
+        {
+          depth: node.depth,
+          value: text,
+          id: slugger.slug(text),
+        },
+      ];
     });
 }
