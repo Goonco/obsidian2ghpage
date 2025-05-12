@@ -39,7 +39,7 @@ a {
 }
 
 .tooltip::after {
-  content: "Not Availabe Yet ☹️";
+  content: "Comming Soon 🚧";
   position: absolute;
   bottom: 120%;
   left: 50%;
