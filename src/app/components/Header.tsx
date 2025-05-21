@@ -10,7 +10,7 @@ export function Header() {
         <div className="relative w-12 h-12">
           <Image src={Logo} alt="blog logo" fill />
         </div>
-        <div className="text-2xl font-semibold">Obsidian2GHPage</div>
+        <div className="text-2xl font-semibold">Obsidian2GitHubPage</div>
       </a>
       <nav className="flex flex-row gap-6 items-center">
         <NavButton>
