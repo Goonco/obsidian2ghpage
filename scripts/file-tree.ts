@@ -2,10 +2,9 @@ import fs from "fs";
 import ignore from "ignore";
 import path from "path";
 
-export const SRC_DIR = path.resolve("./obsidian");
-export const IGNORE_FILE = path.resolve(SRC_DIR, ".mdxignore");
+import { OBSIDIAN_DIR, MDX_IGNORE_FILE } from "../path.ts";
 
-const ign = ignore().add(fs.readFileSync(IGNORE_FILE, "utf-8").toString());
+const ign = ignore().add(fs.readFileSync(MDX_IGNORE_FILE, "utf-8").toString());
 
 export type FileNode = {
   type: "file";
@@ -36,7 +35,7 @@ export default function generateFileTree(
 
     if (
       entry.isDirectory() &&
-      !ign.ignores(path.relative(SRC_DIR, currentPath))
+      !ign.ignores(path.relative(OBSIDIAN_DIR, currentPath))
     ) {
       const childDir = generateFileTree(entry.name, `${absPath}/${entry.name}`);
       if (childDir) currentDirectory.children!.push(childDir);
@@ -45,7 +44,7 @@ export default function generateFileTree(
     if (
       entry.isFile() &&
       entry.name.endsWith(".md") &&
-      !ign.ignores(path.relative(SRC_DIR, currentPath))
+      !ign.ignores(path.relative(OBSIDIAN_DIR, currentPath))
     )
       currentDirectory.children!.push({
         type: "file",

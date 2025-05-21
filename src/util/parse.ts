@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { FileSystemNode } from "@/scripts/file-tree";
-import { DEST_DIR } from "@/scripts/dump-mdx";
+import { OBSIDIAN2GHPAGE_DIR } from "@/path";
 
 import remarkParse from "remark-parse";
 import { unified } from "unified";
@@ -34,7 +34,7 @@ function walk(fsNode: FileSystemNode, pathAcc: string[]): string[][] {
 
 export function fetchFileTree() {
   return JSON.parse(
-    fs.readFileSync(path.join(DEST_DIR, "file-tree.json"), "utf-8")
+    fs.readFileSync(path.join(OBSIDIAN2GHPAGE_DIR, "file-tree.json"), "utf-8")
   ) as FileSystemNode;
 }
 
@@ -45,7 +45,10 @@ export type Heading = {
 };
 
 export function parseHeader(fileName: string): Heading[] {
-  const content = fs.readFileSync(path.join(DEST_DIR, fileName), "utf-8");
+  const content = fs.readFileSync(
+    path.join(OBSIDIAN2GHPAGE_DIR, fileName),
+    "utf-8"
+  );
   const slugger = new GithubSlugger();
 
   return unified()

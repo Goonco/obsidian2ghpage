@@ -1,9 +1,12 @@
 import fs from "fs";
 import path from "path";
-import generateFileTree, { SRC_DIR } from "./file-tree.ts";
+import generateFileTree from "./file-tree.ts";
 import type { FileSystemNode } from "./file-tree.ts";
 
-export const DEST_DIR = path.resolve("./blog");
+import { OBSIDIAN_DIR, OBSIDIAN2GHPAGE_DIR } from "../path.ts";
+
+import dotenv from "dotenv";
+dotenv.config();
 
 function ensureDir(dir: string) {
   if (!fs.existsSync(dir)) {
@@ -31,31 +34,17 @@ function modifyContent(content: string): string {
 }
 
 function main() {
-  const fileTree = generateFileTree("", SRC_DIR);
+  const fileTree = generateFileTree(
+    process.env.NEXT_PUBLIC_ROOT_DIR_NAME!,
+    OBSIDIAN_DIR
+  );
   if (fileTree) {
-    walk(fileTree, DEST_DIR);
+    walk(fileTree, OBSIDIAN2GHPAGE_DIR);
     fs.writeFileSync(
-      path.join(DEST_DIR, "file-tree.json"),
+      path.join(OBSIDIAN2GHPAGE_DIR, "file-tree.json"),
       JSON.stringify(fileTree, null, 2)
     );
   }
 }
 
 main();
-
-// Helper function to log the file tree
-function recursiveLog(value: any, depth = 0) {
-  const indent = "  ".repeat(depth);
-
-  if (typeof value === "object" && value !== null) {
-    console.log(`${indent}{`);
-    for (let key in value) {
-      if (value.hasOwnProperty(key)) {
-        if (typeof value[key] === "object" && value[key] !== null)
-          recursiveLog(value[key], depth + 1);
-        else console.log(`${indent}  ${key}: ${value[key]}`);
-      }
-    }
-    console.log(`${indent}}`);
-  }
-}

@@ -31,7 +31,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
+# .env*
 
 # vercel
 .vercel
@@ -42,4 +42,4 @@ next-env.d.ts
 
 # obsidian vault
 /obsidian
-/blog
+/obsidian2ghpage
