@@ -2,9 +2,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 export default function useDirectorySelection() {
-  const [selectedDir, setSelectedDir] = useState<string>(
-    process.env.NEXT_PUBLIC_ROOT_DIR_NAME!
-  );
+  const [selectedDir, setSelectedDir] = useState<string>("root");
 
   useEffect(() => {
     selectDir(selectedDir);

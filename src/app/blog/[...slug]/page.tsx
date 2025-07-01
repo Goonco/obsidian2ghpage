@@ -6,8 +6,8 @@ export default async function Page({
   params: Promise<{ slug: string[] }>;
 }) {
   const { slug } = await params;
-  const { default: Post } = await import(
-    `@/blog/${decodeURI(slug.join("/"))}.md`
+  const { default: Post, ...metadata } = await import(
+    `@/obsidian2ghpage/${decodeURI(slug.join("/"))}.md`
   );
 
   return <Post />;

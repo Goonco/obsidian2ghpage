@@ -1,10 +1,9 @@
 "use client";
 
-import { FileSystemNode } from "@/scripts/file-tree";
 import { createContext } from "react";
 import useDirectorySelection from "@/src/hook/useDirectorySelection";
-import { DirectoryNode } from "@/scripts/file-tree";
-import { LucideChevronDown } from "lucide-react";
+import { DirectoryNode, FileSystemNode } from "@/scripts/file-tree.type";
+import { LucideChevronDown, LucideHome } from "lucide-react";
 import { useState, useContext } from "react";
 import clsx from "clsx";
 
@@ -13,17 +12,18 @@ export function DirectorySidebar({ fileTree }: { fileTree: FileSystemNode }) {
 
   return (
     <DirectoryContext.Provider value={{ selectedDir, selectDir }}>
-      <div className="w-[250px] border-r border-gray-200 pr-2">
+      <div className="w-full pr-2">
         {fileTree.type === "directory" ? (
-          <Directory directoryNode={fileTree} level={0} prevPath="" />
+          <Directory directoryNode={fileTree} level={0} prevPath="root" />
         ) : (
-          <h1>Error : No File Tree</h1>
+          <h1>Error : No File Tree</h1> // ToDo : Error
         )}
       </div>
     </DirectoryContext.Provider>
   );
 }
 
+// ToDo : change it to function
 const marginVariants: Record<string, string> = {
   "0": "ml-[0px]",
   "1": "ml-[10px]",
@@ -34,7 +34,7 @@ const marginVariants: Record<string, string> = {
   "6": "ml-[60px]",
 };
 
-export function Directory({
+function Directory({
   directoryNode,
   level,
   prevPath,
@@ -52,22 +52,24 @@ export function Directory({
   const { selectedDir, selectDir } = useContext(DirectoryContext);
 
   return (
-    <div className={`font-(family-name:--font-inter) ${marginVariants[level]}`}>
+    <div
+      className={`font-(family-name:--font-inter) ${marginVariants[level]} space-y-1`}
+    >
       <div className="gap-1 flex flex-row items-center justify-between">
         <p
           onClick={() => selectDir(currentPath)}
           className={clsx(
-            "text-sm hover:bg-gray-100 p-1 rounded-md cursor-pointer flex-1",
-            selectedDir === currentPath && "text-violet-700 bg-gray-100"
+            "text-sm hover:bg-slate-100 p-1 rounded-md cursor-pointer flex-1",
+            selectedDir === currentPath && "text-violet-700 bg-slate-100"
           )}
         >
-          {directoryNode.name}
+          {level === 0 ? <LucideHome size={18} /> : directoryNode.name}
         </p>
 
         {hasSubDirectory ? (
           <div
             onClick={() => setOpen((p) => !p)}
-            className="cursor-pointer hover:bg-gray-100 p-1 rounded-md"
+            className="cursor-pointer hover:bg-slate-100 p-1 rounded-md"
           >
             <LucideChevronDown
               size={16}
@@ -78,23 +80,26 @@ export function Directory({
             />
           </div>
         ) : (
-          <LucideChevronDown size={16} className="invisible" />
+          <div className="p-1 ">
+            <LucideChevronDown size={16} className="invisible" />
+          </div>
         )}
       </div>
 
-      {open &&
-        directoryNode.children?.map((child) => {
-          if (child.type === "directory") {
-            return (
+      {open && (
+        <div className="space-y-1">
+          {directoryNode.children
+            ?.filter((n) => n.type === "directory")
+            .map((child) => (
               <Directory
                 key={child.name}
                 directoryNode={child}
                 level={level + 1}
                 prevPath={currentPath + "/"}
               />
-            );
-          }
-        })}
+            ))}
+        </div>
+      )}
     </div>
   );
 }

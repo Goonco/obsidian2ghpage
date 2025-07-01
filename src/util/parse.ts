@@ -1,6 +1,10 @@
 import fs from "fs";
 import path from "path";
-import { FileSystemNode } from "@/scripts/file-tree";
+import {
+  DirectoryNode,
+  FileNode,
+  FileSystemNode,
+} from "@/scripts/file-tree.type";
 import { OBSIDIAN2GHPAGE_DIR } from "@/path";
 
 import remarkParse from "remark-parse";
@@ -18,7 +22,12 @@ export function parseFileTree() {
 }
 
 function walk(fsNode: FileSystemNode, pathAcc: string[]): string[][] {
-  const slug = fsNode.name === "" ? [] : pathAcc.concat(fsNode.name);
+  const slug =
+    fsNode.name === ""
+      ? []
+      : pathAcc.concat(
+          fsNode.type === "file" ? fsNode.frontmatter.title : fsNode.name
+        );
 
   if (fsNode.type === "file") return [slug];
   if (fsNode.type === "directory" && fsNode.children) {
@@ -30,6 +39,33 @@ function walk(fsNode: FileSystemNode, pathAcc: string[]): string[][] {
   }
 
   return [];
+}
+
+function follow(node: DirectoryNode, segments: string[]): FileNode[] {
+  if (segments.length === 0)
+    return node.children.filter((n) => n.type === "file");
+
+  const next = node.children
+    .filter((n) => n.type === "directory")
+    .find((n) => n.name === segments[0]);
+
+  if (!next) throw new Error();
+  segments.shift();
+  return follow(next, segments);
+}
+
+export function fetchMDs(path: string): FileNode[] {
+  const segments = path.replace("root", "").split("/");
+
+  // ToDo..
+  return follow(
+    {
+      type: "directory",
+      name: "adhoc",
+      children: [fetchFileTree()],
+    },
+    segments
+  );
 }
 
 export function fetchFileTree() {
